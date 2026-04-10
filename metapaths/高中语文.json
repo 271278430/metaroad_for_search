@@ -1,0 +1,16 @@
+[
+  "(:Unit)-[]-(:LearningTasks)-[]-(:CourseStructure)-[]-(:AcademicRequirements)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:CourseStructure)",
+  "(:Unit)-[]-(:Plate)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:CourseStructure)-[]-(:CourseTarget)-[]-(:CoreLiteracy)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:CourseStructure)-[]-(:CourseTarget)-[]-(:TargetRequirements)",
+  "(:Unit)-[]-(:Contents)",
+  "(:Unit)-[]-(:LearningTasks)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:CourseStructure)-[]-(:CourseTarget)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:CourseStructure)-[]-(:CourseTarget)-[]-(:AcademicQuality)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:CourseStructure)-[]-(:CourseTarget)-[]-(:TargetRequirements)-[]-(:TeachingEvaluation)",
+  "(:Unit)-[]-(:Plate)-[]-(:Contents)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:CourseStructure)-[]-(:CourseTarget)-[]-(:TargetRequirements)-[]-(:ExaminationTip)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:CourseStructure)-[]-(:CourseTarget)-[]-(:CoursePhilosophy)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:CourseStructure)-[]-(:CourseTarget)-[]-(:CoursePhilosophy)-[]-(:CourseNature)"
+]

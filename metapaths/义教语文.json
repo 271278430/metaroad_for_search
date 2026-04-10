@@ -1,0 +1,15 @@
+[
+  "(:Unit)-[]-(:LearningTasks)-[]-(:ThemeMedium)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:EducationalStage)-[]-(:CoursePhilosophy)-[]-(:CourseTarget)-[]-(:EvaluationTip)",
+  "(:Unit)-[]-(:Plate)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:EducationalStage)-[]-(:AcademicQuality)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:EducationalStage)-[]-(:CoursePhilosophy)-[]-(:CourseNature)",
+  "(:Unit)-[]-(:Contents)",
+  "(:Unit)-[]-(:LearningTasks)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:EducationalStage)-[]-(:CoursePhilosophy)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:EducationalStage)-[]-(:CoursePhilosophy)-[]-(:CoreLiteracy)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:EducationalStage)",
+  "(:Unit)-[]-(:Plate)-[]-(:Contents)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:EducationalStage)-[]-(:CoursePhilosophy)-[]-(:CourseTarget)-[]-(:TeachingTip)",
+  "(:Unit)-[]-(:LearningTasks)-[]-(:EducationalStage)-[]-(:CoursePhilosophy)-[]-(:CourseTarget)"
+]

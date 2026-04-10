@@ -1,0 +1,21 @@
+[
+  "(:Chapter)-[]-(:Plate)-[]-(:Section)-[]-(:CourseContent)",
+  "(:Chapter)-[]-(:Plate)-[]-(:Section)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:AcademicQuality)",
+  "(:Chapter)-[]-(:Plate)",
+  "(:Chapter)-[]-(:Subtheme)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:CoreLiteracy)-[]-(:CoursePhilosophy)-[]-(:CourseNature)",
+  "(:Chapter)-[]-(:Plate)-[]-(:Section)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:CoreLiteracy)-[]-(:CoursePhilosophy)-[]-(:CourseNature)",
+  "(:Chapter)-[]-(:Subtheme)-[]-(:CourseContent)-[]-(:TargetRequirements)",
+  "(:Chapter)-[]-(:Plate)-[]-(:Section)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:ImplementationSuggestion)",
+  "(:Chapter)-[]-(:Subtheme)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:AcademicQuality)",
+  "(:Chapter)-[]-(:Plate)-[]-(:Section)-[]-(:CourseContent)-[]-(:TargetRequirements)",
+  "(:Chapter)-[]-(:Subtheme)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:ImplementationSuggestion)",
+  "(:Chapter)-[]-(:Subtheme)",
+  "(:Chapter)-[]-(:Subtheme)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:CoreLiteracy)",
+  "(:Chapter)-[]-(:Subtheme)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:CoreLiteracy)-[]-(:CoursePhilosophy)-[]-(:CourseStructure)",
+  "(:Chapter)-[]-(:Plate)-[]-(:Section)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:CoreLiteracy)-[]-(:CoursePhilosophy)",
+  "(:Chapter)-[]-(:Plate)-[]-(:Section)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:CoreLiteracy)-[]-(:CoursePhilosophy)-[]-(:CourseStructure)",
+  "(:Chapter)-[]-(:Subtheme)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:CoreLiteracy)-[]-(:CoursePhilosophy)",
+  "(:Chapter)-[]-(:Plate)-[]-(:Section)-[]-(:CourseContent)-[]-(:TargetRequirements)-[]-(:CoreLiteracy)",
+  "(:Chapter)-[]-(:Subtheme)-[]-(:CourseContent)",
+  "(:Chapter)-[]-(:Plate)-[]-(:Section)"
+]

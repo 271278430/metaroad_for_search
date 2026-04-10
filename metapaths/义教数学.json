@@ -1,0 +1,17 @@
+[
+  "(:Chapter)-[]-(:Theme)-[]-(:LearningDomain)",
+  "(:Chapter)-[]-(:Theme)-[]-(:CoreLiteracyAspect)",
+  "(:Chapter)-[]-(:Theme)-[]-(:CoreLiteracyPerformance)-[]-(:CoreLiteracyAspect)",
+  "(:Chapter)-[]-(:Section)-[]-(:SubSection)",
+  "(:Chapter)-[]-(:Implementation)",
+  "(:Chapter)-[]-(:Theme)-[]-(:CoreLiteracyPerformance)",
+  "(:Chapter)-[]-(:Theme)-[]-(:CoreLiteracyPerformance)-[]-(:CoreLiteracyAspect)-[]-(:CoursePhilosophy)-[]-(:CourseNature)",
+  "(:Chapter)-[]-(:Theme)-[]-(:CoreLiteracyAspect)-[]-(:CoursePhilosophy)",
+  "(:Chapter)-[]-(:Theme)-[]-(:LearningDomain)-[]-(:Stage)",
+  "(:Chapter)-[]-(:Theme)",
+  "(:Chapter)-[]-(:Theme)-[]-(:LearningDomain)-[]-(:Stage)-[]-(:CourseGoal)",
+  "(:Chapter)-[]-(:Theme)-[]-(:CoreLiteracyAspect)-[]-(:CoreLiteracyPerformance)",
+  "(:Chapter)-[]-(:Section)",
+  "(:Chapter)-[]-(:Theme)-[]-(:CoreLiteracyPerformance)-[]-(:CoreLiteracyAspect)-[]-(:CoursePhilosophy)",
+  "(:Chapter)-[]-(:Theme)-[]-(:CoreLiteracyAspect)-[]-(:CoursePhilosophy)-[]-(:CourseNature)"
+]

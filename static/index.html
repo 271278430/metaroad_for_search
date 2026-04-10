@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学科学段知识图谱</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #f0f2f5; color: #333; height: 100vh; display: flex; flex-direction: column; }
+
+/* 顶栏：学科选择 */
+#subject-bar {
+    background: #fff; border-bottom: 1px solid #e8e8e8; padding: 10px 20px;
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+#subject-bar .label { font-weight: 600; margin-right: 6px; color: #555; font-size: 14px; }
+.subj-btn {
+    padding: 5px 14px; border: 1px solid #d9d9d9; border-radius: 4px;
+    background: #fff; cursor: pointer; font-size: 13px; color: #333;
+    transition: all 0.2s;
+}
+.subj-btn:hover { border-color: #1890ff; color: #1890ff; }
+.subj-btn.active { background: #1890ff; color: #fff; border-color: #1890ff; }
+.subj-btn.disabled { color: #bbb; cursor: not-allowed; border-color: #eee; }
+
+/* 主区域 */
+#main { display: flex; flex: 1; overflow: hidden; }
+
+/* 左侧：章节列表 */
+#chapter-panel {
+    width: 340px; min-width: 280px; background: #fff; border-right: 1px solid #e8e8e8;
+    display: flex; flex-direction: column;
+}
+#chapter-header {
+    padding: 16px 18px 10px; border-bottom: 1px solid #f0f0f0;
+}
+#chapter-header h2 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+#chapter-meta { font-size: 12px; color: #999; display: flex; align-items: center; gap: 12px; }
+#refresh-btn {
+    background: none; border: 1px solid #d9d9d9; border-radius: 4px; padding: 2px 10px;
+    font-size: 12px; cursor: pointer; color: #666;
+}
+#refresh-btn:hover { border-color: #1890ff; color: #1890ff; }
+#chapter-search {
+    margin: 10px 18px; padding: 7px 12px; border: 1px solid #d9d9d9; border-radius: 4px;
+    font-size: 13px; outline: none;
+}
+#chapter-search:focus { border-color: #1890ff; }
+#chapter-list { flex: 1; overflow-y: auto; padding: 4px 0; }
+.ch-item {
+    padding: 10px 18px; cursor: pointer; font-size: 14px; border-left: 3px solid transparent;
+    transition: all 0.15s; display: flex; align-items: center;
+}
+.ch-item:hover { background: #f5f8ff; }
+.ch-item.active { background: #e6f7ff; border-left-color: #1890ff; }
+.ch-item .idx { color: #999; margin-right: 8px; font-size: 12px; min-width: 20px; }
+.ch-item .title { flex: 1; }
+.ch-item .check { color: #52c41a; font-size: 14px; margin-left: 6px; }
+
+/* 右侧：内容展示 */
+#content-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #fff; }
+#content-header {
+    padding: 16px 28px 12px; border-bottom: 1px solid #f0f0f0;
+    display: flex; align-items: center; justify-content: space-between;
+}
+#content-header h2 { font-size: 20px; font-weight: 600; }
+#copy-btn {
+    padding: 5px 16px; background: #fff; border: 1px solid #d9d9d9; border-radius: 4px;
+    cursor: pointer; font-size: 13px; color: #666;
+}
+#copy-btn:hover { border-color: #1890ff; color: #1890ff; }
+#content-body { flex: 1; overflow-y: auto; padding: 0; }
+
+/* 空状态 */
+.empty-state { text-align: center; padding: 80px 20px; color: #999; }
+.empty-state h3 { font-size: 18px; margin-bottom: 8px; color: #bbb; }
+
+/* ====== 树状概览 ====== */
+#tree-overview {
+    background: #fafbfc; border-bottom: 2px solid #e8e8e8;
+    max-height: 360px; overflow-y: auto; padding: 16px 28px 12px;
+}
+#tree-overview h3 {
+    font-size: 13px; color: #999; font-weight: 500; margin-bottom: 8px;
+    text-transform: uppercase; letter-spacing: 1px;
+}
+.tree-line {
+    font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+    font-size: 13px; line-height: 1.8; white-space: nowrap; cursor: pointer;
+    transition: background 0.1s;
+}
+.tree-line:hover { background: #e6f7ff; }
+.tree-connector { color: #bbb; }
+.tree-line .type-badge {
+    display: inline-block; padding: 0px 5px; border-radius: 3px; font-size: 10px;
+    font-weight: 500; vertical-align: middle; font-family: -apple-system, sans-serif;
+}
+.type-badge.structural { background: #e6f7ff; color: #1890ff; }
+.type-badge.entity { background: #f6ffed; color: #52c41a; }
+.tree-line .tree-title { color: #333; font-family: -apple-system, sans-serif; font-size: 13px; }
+.tree-line .ref-tag { color: #bbb; font-style: italic; font-size: 11px; font-family: -apple-system, sans-serif; }
+
+/* ====== 文本内容区 ====== */
+#text-content { padding: 20px 28px 40px; }
+
+.content-section {
+    margin-bottom: 20px; padding: 12px 16px;
+    border-left: 3px solid #e8e8e8; border-radius: 0 4px 4px 0;
+    background: #fafbfc;
+}
+.content-section:hover { border-left-color: #1890ff; }
+
+.section-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.section-header .type-badge {
+    display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 11px;
+    font-weight: 500;
+}
+.section-title { font-weight: 600; color: #1a1a1a; font-size: 15px; }
+.section-depth-0 .section-title { font-size: 18px; }
+.section-depth-1 .section-title { font-size: 16px; }
+.section-depth-2 .section-title { font-size: 15px; }
+.section-depth-3 .section-title { font-size: 14px; }
+
+.props-table { margin: 4px 0 0; }
+.prop-row { display: flex; margin-bottom: 3px; font-size: 13px; line-height: 1.6; }
+.prop-key { font-weight: 600; color: #555; min-width: 100px; max-width: 160px; flex-shrink: 0; }
+.prop-val { color: #333; flex: 1; word-break: break-all; white-space: pre-wrap; }
+.prop-val ul { padding-left: 18px; margin: 4px 0; }
+.prop-val li { margin-bottom: 2px; }
+
+.ref-section { opacity: 0.5; }
+.ref-hint { color: #999; font-size: 12px; margin-left: 8px; }
+
+/* 加载中 */
+.loading { text-align: center; padding: 40px; color: #999; }
+</style>
+</head>
+<body>
+
+<!-- 学科选择栏 -->
+<div id="subject-bar">
+    <span class="label">学科学段：</span>
+    <div id="subject-buttons"></div>
+</div>
+
+<!-- 主区域 -->
+<div id="main">
+    <!-- 左：章节列表 -->
+    <div id="chapter-panel">
+        <div id="chapter-header">
+            <h2 id="ch-title">请选择学科</h2>
+            <div id="chapter-meta">
+                <span id="ch-count"></span>
+                <button id="refresh-btn" onclick="refreshChapters()" style="display:none">一键刷新全部章节</button>
+            </div>
+        </div>
+        <input id="chapter-search" placeholder="搜索章节..." oninput="filterChapters()" style="display:none">
+        <div id="chapter-list">
+            <div class="empty-state"><h3>请先选择学科</h3></div>
+        </div>
+    </div>
+
+    <!-- 右：内容展示 -->
+    <div id="content-panel">
+        <div id="content-header">
+            <h2 id="ct-title"></h2>
+            <button id="copy-btn" onclick="copyContent()" style="display:none">复制</button>
+        </div>
+        <div id="content-body">
+            <div class="empty-state"><h3>请选择章节查看内容</h3></div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentSubject = null;
+let currentChapterId = null;
+let allChapters = [];
+let currentTree = null;
+
+const STRUCTURAL_TYPES = ['Chapter', 'Unit', 'Section', 'SubSection', 'KeyPoint'];
+
+// ==================== 学科选择 ====================
+
+async function init() {
+    const res = await fetch('/api/subjects');
+    const subjects = await res.json();
+    const container = document.getElementById('subject-buttons');
+    container.innerHTML = '';
+    subjects.forEach(s => {
+        const btn = document.createElement('button');
+        btn.className = 'subj-btn' + (s.has_data ? '' : ' disabled');
+        btn.textContent = s.name;
+        if (s.has_data) {
+            btn.onclick = () => selectSubject(s.name, btn);
+        }
+        container.appendChild(btn);
+    });
+}
+
+function selectSubject(name, btn) {
+    if (currentSubject === name) return;
+    currentSubject = name;
+    currentChapterId = null;
+    document.querySelectorAll('.subj-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    loadChapters();
+    document.getElementById('ct-title').textContent = '';
+    document.getElementById('content-body').innerHTML = '<div class="empty-state"><h3>请选择章节查看内容</h3></div>';
+    document.getElementById('copy-btn').style.display = 'none';
+}
+
+// ==================== 章节列表 ====================
+
+async function loadChapters() {
+    const list = document.getElementById('chapter-list');
+    const search = document.getElementById('chapter-search');
+    const refresh = document.getElementById('refresh-btn');
+    document.getElementById('ch-title').textContent = currentSubject;
+    list.innerHTML = '<div class="loading">加载中...</div>';
+    search.style.display = 'block';
+    refresh.style.display = 'inline-block';
+
+    const res = await fetch(`/api/${encodeURIComponent(currentSubject)}/chapters`);
+    allChapters = await res.json();
+
+    document.getElementById('ch-count').textContent = `${allChapters.length} 章节`;
+    renderChapterList(allChapters);
+}
+
+function renderChapterList(chapters) {
+    const list = document.getElementById('chapter-list');
+    if (!chapters.length) {
+        list.innerHTML = '<div class="empty-state"><h3>暂无章节</h3></div>';
+        return;
+    }
+    list.innerHTML = chapters.map((ch, i) =>
+        `<div class="ch-item ${ch.id === currentChapterId ? 'active' : ''}" onclick="selectChapter('${escapeAttr(ch.id)}', '${escapeAttr(ch.title)}')">
+            <span class="idx">${i + 1}</span>
+            <span class="title">${escapeHtml(ch.title)}</span>
+            <span class="check">✓</span>
+        </div>`
+    ).join('');
+}
+
+function filterChapters() {
+    const q = document.getElementById('chapter-search').value.trim().toLowerCase();
+    if (!q) { renderChapterList(allChapters); return; }
+    renderChapterList(allChapters.filter(ch => ch.title.toLowerCase().includes(q)));
+}
+
+async function refreshChapters() {
+    await fetch('/api/cache/clear', { method: 'POST' });
+    await loadChapters();
+}
+
+// ==================== 章节内容 ====================
+
+async function selectChapter(id, title) {
+    currentChapterId = id;
+    document.querySelectorAll('.ch-item').forEach(el => el.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    document.getElementById('ct-title').textContent = title;
+    document.getElementById('copy-btn').style.display = 'inline-block';
+    document.getElementById('content-body').innerHTML = '<div class="loading">加载中...</div>';
+
+    const res = await fetch(`/api/${encodeURIComponent(currentSubject)}/chapter/${encodeURIComponent(id)}`);
+    currentTree = await res.json();
+    renderContent(currentTree);
+}
+
+function renderContent(tree) {
+    const body = document.getElementById('content-body');
+    if (!tree) {
+        body.innerHTML = '<div class="empty-state"><h3>无内容</h3></div>';
+        return;
+    }
+
+    // 收集所有节点（展平），用于文本内容区
+    const flatNodes = [];
+    flattenTree(tree, flatNodes, 0);
+
+    let html = '';
+
+    // === 树状概览 ===
+    html += '<div id="tree-overview">';
+    html += '<h3>结构概览</h3>';
+    html += renderTreeOverview(tree, '', true);
+    html += '</div>';
+
+    // === 文本内容 ===
+    html += '<div id="text-content">';
+    html += renderTextContent(flatNodes);
+    html += '</div>';
+
+    body.innerHTML = html;
+}
+
+// ==================== 树状概览渲染 ====================
+
+function renderTreeOverview(tree, prefix, isRoot) {
+    if (!tree) return '';
+    const { node, children } = tree;
+    const isStruct = STRUCTURAL_TYPES.includes(node.type);
+    const badgeClass = isStruct ? 'structural' : 'entity';
+    let html = '';
+
+    if (isRoot) {
+        // 根节点无前缀
+        html += `<div class="tree-line" data-id="${escapeAttr(node.id)}">`;
+        html += `<span class="type-badge ${badgeClass}">${escapeHtml(node.type)}</span> `;
+        html += `<span class="tree-title">${escapeHtml(node.title)}</span>`;
+        html += `</div>`;
+        if (children && children.length) {
+            children.forEach((c, i) => {
+                const isLast = i === children.length - 1;
+                html += renderTreeOverview(c, '', false, isLast);
+            });
+        }
+    } else {
+        // 已在调用处传入 isLast
+    }
+
+    return html;
+}
+
+// 重写：递归渲染树状概览
+function renderTreeOverview(tree, prefix, isRoot, isLast) {
+    if (!tree) return '';
+    const { node, children } = tree;
+    const isStruct = STRUCTURAL_TYPES.includes(node.type);
+    const badgeClass = isStruct ? 'structural' : 'entity';
+
+    let html = '';
+
+    if (isRoot) {
+        html += `<div class="tree-line" data-id="${escapeAttr(node.id)}">`;
+        html += `<span class="type-badge ${badgeClass}">${escapeHtml(node.type)}</span> `;
+        html += `<span class="tree-title">${escapeHtml(node.title)}</span>`;
+        if (tree.ref) html += ` <span class="ref-tag">(见上文)</span>`;
+        html += `</div>`;
+        if (children && children.length) {
+            children.forEach((c, i) => {
+                const isLast = i === children.length - 1;
+                html += renderTreeOverview(c, '', false, isLast);
+            });
+        }
+    } else {
+        const connector = isLast ? '└─' : '├─';
+        const newPrefix = prefix + (isLast ? '  ' : '│ ');
+
+        html += `<div class="tree-line" data-id="${escapeAttr(node.id)}">`;
+        html += `<span class="tree-connector">${prefix}${connector} </span>`;
+        html += `<span class="type-badge ${badgeClass}">${escapeHtml(node.type)}</span> `;
+        html += `<span class="tree-title">${escapeHtml(node.title)}</span>`;
+        if (tree.ref) html += ` <span class="ref-tag">(见上文)</span>`;
+        html += `</div>`;
+
+        if (children && children.length) {
+            children.forEach((c, i) => {
+                const childIsLast = i === children.length - 1;
+                html += renderTreeOverview(c, newPrefix, false, childIsLast);
+            });
+        }
+    }
+
+    return html;
+}
+
+// ==================== 文本内容渲染 ====================
+
+function flattenTree(tree, result, depth) {
+    if (!tree) return;
+    const { node, children } = tree;
+    result.push({ node, depth, ref: tree.ref || false });
+    if (children && children.length) {
+        children.forEach(c => flattenTree(c, result, depth + 1));
+    }
+}
+
+function renderTextContent(flatNodes) {
+    let html = '';
+    const seenIds = new Set();
+
+    for (const item of flatNodes) {
+        const { node, depth, ref } = item;
+        const isStruct = STRUCTURAL_TYPES.includes(node.type);
+        const badgeClass = isStruct ? 'structural' : 'entity';
+        const isDuplicate = seenIds.has(node.id);
+        seenIds.add(node.id);
+
+        html += `<div class="content-section section-depth-${Math.min(depth, 3)} ${ref ? 'ref-section' : ''}" id="content-${node.id}">`;
+        html += `<div class="section-header">`;
+        html += `<span class="type-badge ${badgeClass}">${escapeHtml(node.type)}</span>`;
+        html += `<span class="section-title">${escapeHtml(node.title)}</span>`;
+        if (ref) html += `<span class="ref-hint">（见上文完整内容）</span>`;
+        else if (isDuplicate) html += `<span class="ref-hint">（同上，内容已展示）</span>`;
+        html += `</div>`;
+
+        // 显示属性（引用节点和重复节点不显示）
+        if (node.props && Object.keys(node.props).length && !ref && !isDuplicate) {
+            html += `<div class="props-table">${renderProps(node.props)}</div>`;
+        }
+
+        html += `</div>`;
+    }
+
+    return html;
+}
+
+function renderProps(props) {
+    let html = '';
+    const keys = Object.keys(props).sort((a, b) => {
+        if (a === 'description') return -1;
+        if (b === 'description') return 1;
+        return a.localeCompare(b);
+    });
+    for (const k of keys) {
+        const v = props[k];
+        if (!v) continue;
+        html += `<div class="prop-row"><span class="prop-key">${escapeHtml(k)}</span>`;
+        html += `<span class="prop-val">${renderValue(v)}</span></div>`;
+    }
+    return html;
+}
+
+function renderValue(v) {
+    if (Array.isArray(v)) {
+        return '<ul>' + v.map(item => `<li>${escapeHtml(String(item))}</li>`).join('') + '</ul>';
+    }
+    if (typeof v === 'object' && v !== null) {
+        try {
+            return escapeHtml(JSON.stringify(v, null, 2));
+        } catch { return escapeHtml(String(v)); }
+    }
+    if (typeof v === 'string' && v.trim().startsWith('{')) {
+        try {
+            const obj = JSON.parse(v);
+            let html = '';
+            for (const [k2, v2] of Object.entries(obj)) {
+                html += `<b>${escapeHtml(k2)}</b>: ${escapeHtml(typeof v2 === 'string' ? v2 : JSON.stringify(v2))}<br>`;
+            }
+            return html;
+        } catch { /* 不是 JSON，正常显示 */ }
+    }
+    return escapeHtml(String(v));
+}
+
+// ==================== 工具函数 ====================
+
+function escapeHtml(s) {
+    const div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+}
+
+function escapeAttr(s) {
+    return s.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+function copyContent() {
+    const body = document.getElementById('content-body');
+    const text = body.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = '已复制';
+        setTimeout(() => { btn.textContent = '复制'; }, 1500);
+    });
+}
+
+// 启动
+init();
+</script>
+</body>
+</html>

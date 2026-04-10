@@ -1,0 +1,15 @@
+[
+  "(:Chapter)-[]-(:Section)-[]-(:SubSection)",
+  "(:Chapter)-[]-(:ThemeL1)-[]-(:CourseType)-[]-(:CoreLiteracy)-[]-(:CoursePhilosophy)",
+  "(:Chapter)-[]-(:ThemeL1)-[]-(:ThemeL2)",
+  "(:Chapter)-[]-(:ThemeL1)-[]-(:CourseType)-[]-(:CoreLiteracy)-[]-(:AcademicQuality)-[]-(:Implementation)",
+  "(:Chapter)-[]-(:ThemeL1)-[]-(:CourseType)-[]-(:CoreLiteracy)-[]-(:AcademicQuality)-[]-(:Implementation)-[]-(:Appendix)",
+  "(:Chapter)-[]-(:MicroProject)",
+  "(:Chapter)-[]-(:ThemeL1)-[]-(:Experiment)",
+  "(:Chapter)-[]-(:Section)",
+  "(:Chapter)-[]-(:ThemeL1)-[]-(:CourseType)-[]-(:CoreLiteracy)-[]-(:AcademicQuality)",
+  "(:Chapter)-[]-(:ThemeL1)",
+  "(:Chapter)-[]-(:ThemeL1)-[]-(:CourseType)",
+  "(:Chapter)-[]-(:ThemeL1)-[]-(:CourseType)-[]-(:CoreLiteracy)-[]-(:CoursePhilosophy)-[]-(:CoreNature)",
+  "(:Chapter)-[]-(:ThemeL1)-[]-(:CourseType)-[]-(:CoreLiteracy)"
+]

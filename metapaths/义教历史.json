@@ -1,0 +1,14 @@
+[
+  "(:Chapter)-[]-(:Period)-[]-(:Module)-[]-(:CoreLiteracy)-[]-(:InterdisciplinaryLearning)",
+  "(:Chapter)-[]-(:Period)-[]-(:Module)-[]-(:CoreLiteracy)-[]-(:CurriculumImplementation)",
+  "(:Chapter)-[]-(:Period)-[]-(:Module)-[]-(:CoreLiteracy)-[]-(:AcademicQuality)-[]-(:CurriculumImplementation)",
+  "(:Chapter)-[]-(:Period)-[]-(:Module)-[]-(:CoreLiteracy)-[]-(:CurriculumImplementation)-[]-(:AcademicQuality)",
+  "(:Chapter)-[]-(:Period)-[]-(:Module)-[]-(:CoreLiteracy)-[]-(:CoursePhilosophy)-[]-(:CourseNature)",
+  "(:Chapter)-[]-(:Period)-[]-(:Module)-[]-(:CoreLiteracy)-[]-(:AcademicQuality)",
+  "(:Chapter)-[]-(:Period)-[]-(:Module)-[]-(:CoreLiteracy)-[]-(:CoursePhilosophy)",
+  "(:Chapter)-[]-(:Period)-[]-(:Module)-[]-(:CoreLiteracy)",
+  "(:Chapter)-[]-(:Period)",
+  "(:Chapter)-[]-(:Period)-[]-(:Module)-[]-(:CoreLiteracy)-[]-(:InterdisciplinaryLearning)-[]-(:ActivityDesign)",
+  "(:Chapter)-[]-(:Section)",
+  "(:Chapter)-[]-(:Period)-[]-(:Module)"
+]
